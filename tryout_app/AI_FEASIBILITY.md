@@ -1,33 +1,28 @@
-# TryOut On-Device AI Feasibility Gate
+# TryOut On-Device AI — Feasibility Findings (2026-10-25)
 
-## Target
-Android, 4 GB RAM, Flutter, no paid GPU inference server.
+## Important result
+The leading research candidate, Mobile-VTON, demonstrates on-device inference in its paper, but the official repository states that both code and checkpoints use **CC BY-NC-SA 4.0**. That is a non-commercial license and is not suitable for a monetized Play Store app without separate written permission from the rights holders.
 
-## Do not enable fake generation
-The current UI deliberately does not pretend to generate a try-on image. A genuine model integration is a separate milestone.
+Sources:
+- Official repository: https://github.com/tmllab/2026_CVPR_Mobile-VTON
+- Official README (license section): https://github.com/tmllab/2026_CVPR_Mobile-VTON/blob/main/README.md
+- CVPR 2026 supplementary material describes testing on Xiaomi 17 Pro Max / Snapdragon 8 Gen 5, with about 80 seconds for a 1024x768 result: https://openaccess.thecvf.com/content/CVPR2026/supplemental/Wan_Mobile-VTON_High-Fidelity_On-Device_CVPR_2026_supplemental.pdf
 
-## Required model audit
-For each candidate, record:
-- Repository URL, commit/tag, license for code and weights
-- Whether commercial use and redistribution are allowed
-- Model architecture and weight size
-- Required framework/runtime and supported Android operators
-- Input resolution and expected output
-- Peak RAM including app, preprocessing, model weights, activations, and output tensors
-- Actual inference time on a physical 4 GB RAM phone
-- Thermal behavior and repeat-run stability
-- Offline inference confirmation
+## 4GB target warning
+The published device result uses a flagship Snapdragon 8 Gen 5 / Hexagon NPU, not a generic 4GB RAM Android phone. It does **not** establish compatibility with the user's target devices. A physical-device benchmark is required.
 
-## Candidate investigation
-- Mobile-VTON: investigate official repository and paper; do not assume 4 GB feasibility from the word “mobile” or parameter count.
-- DM-VTON and other distilled VTON projects: verify each exact repository and weight license before commercial use. Non-commercial-only licenses are not acceptable for a monetized app without separate written permission.
-- LiteRT or ONNX Runtime Mobile may be considered only if the model architecture can be converted and supported operators are available. Conversion must be validated against original model outputs.
+## Current engineering decision
+- Do not package Mobile-VTON weights or code into TryOut for commercial release unless written commercial permission is obtained.
+- Do not use DM-VTON or another non-commercially licensed candidate in a monetized app without permission.
+- Do not fake the try-on result.
+- Keep the Generate button honest until a commercially usable model has passed a physical 4GB Android test.
 
-## Acceptance criteria
-1. Real output depends on both supplied person and garment images.
-2. No network request is required for inference.
-3. Runs without out-of-memory errors on a physical 4 GB device.
-4. Benchmark includes peak RAM, latency, output quality, and device details.
-5. Commercial license review is documented.
+## Next steps
+1. Find a VTON model whose code and weights allow commercial use, or obtain written commercial permission for a suitable model.
+2. Confirm Android runtime conversion support (LiteRT, ONNX Runtime Mobile, or a custom native runtime).
+3. Benchmark model size, peak memory, inference latency, output quality, and thermal behavior on a real 4GB device.
+4. Integrate the validated model behind a native Flutter platform channel.
+5. Only then enable local generation and release testing.
 
-If no candidate meets the requirements, report the blocker honestly rather than shipping a fake result.
+## Current app state
+The Flutter starter supports local photo selection and has UI tabs. Actual on-device virtual try-on inference is not integrated. The current message on Generate is intentional to avoid presenting a fake AI result as real.
