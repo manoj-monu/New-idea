@@ -11,7 +11,7 @@ const muted = Color(0xFF77758D);
 const pageBg = Color(0xFFFAF9FF);
 const categories = ['Women', 'Men', 'Kids'];
 const clothes = ['Tops', 'Dresses', 'Jeans', 'Jackets', 'Sarees', 'Traditional', 'Sportswear', 'Innerwear', 'Shirts'];
-const screenTitles = ['Splash Screen','Onboarding 1','Onboarding 2','Onboarding 3','Home Screen','Choose Category','Select Clothing','Choose Your Photo','Crop Photo','Choose Clothing Photo','Processing','Try-On Result','Edit Look','Save & Share','My Wardrobe','My Looks / History','Profile','Settings','Help & Support','Side Menu'];
+const screenTitles = ['Splash Screen','Onboarding 1','Onboarding 2','Onboarding 3','Home Screen','Choose Category','Select Clothing','Choose Your Photo','Crop Photo','Choose Clothing Photo','Processing','Try-On Result','Edit Look','Save & Share','My Wardrobe','My Looks / History','Profile','Settings','Help & Support','Side Menu','3D View'];
 
 class TryOutApp extends StatelessWidget {
   const TryOutApp({super.key});
@@ -142,7 +142,8 @@ class _AppScreenState extends State<AppScreen> {
       case 16: return _profileScreen();
       case 17: return _settingsScreen();
       case 18: return _helpScreen();
-      default: return _menuScreen();
+      case 19: return _menuScreen();
+      default: return _threeDScreen();
     }
   }
   Widget _intro(String title, String subtitle, String footer, IconData icon, String button, VoidCallback action) => Center(child: SingleChildScrollView(padding: const EdgeInsets.all(26), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -224,7 +225,7 @@ class _AppScreenState extends State<AppScreen> {
   Widget _profileScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Profile', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 18),
     Container(padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)), child: const Row(children: [CircleAvatar(radius: 28, backgroundColor: purpleLight, child: Icon(Icons.person, color: purple, size: 30)), SizedBox(width: 14), Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Guest User', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: ink)), Text('Local profile', style: TextStyle(color: muted))])])),
-    const SizedBox(height: 12), for (final item in [(Icons.checkroom,'My Wardrobe',14),(Icons.favorite_border,'My Looks',15),(Icons.settings_outlined,'Settings',17),(Icons.help_outline,'Help & Support',18),(Icons.info_outline,'About TryOut',17),(Icons.star_border,'Rate App',17),(Icons.share_outlined,'Share App',13)]) ListTile(leading: Icon(item.$1, color: purple), title: Text(item.$2, style: const TextStyle(color: ink)), trailing: const Icon(Icons.chevron_right), onTap: () => go(item.$3))
+    const SizedBox(height: 12), for (final item in [(Icons.checkroom,'My Wardrobe',14),(Icons.view_in_ar,'3D View — Rotate Model',20),(Icons.favorite_border,'My Looks',15),(Icons.settings_outlined,'Settings',17),(Icons.help_outline,'Help & Support',18),(Icons.info_outline,'About TryOut',17),(Icons.star_border,'Rate App',17),(Icons.share_outlined,'Share App',13)]) ListTile(leading: Icon(item.$1, color: purple), title: Text(item.$2, style: const TextStyle(color: ink)), trailing: const Icon(Icons.chevron_right), onTap: () => go(item.$3))
   ]);
   Widget _settingsScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Settings', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 12),
@@ -237,9 +238,51 @@ class _AppScreenState extends State<AppScreen> {
     for (final item in [('Frequently Asked Questions','Common questions'),('Contact Us','Get in touch with support'),('Report a Problem','Help us improve')]) Card(color: Colors.white, child: ListTile(leading: const Icon(Icons.help_outline, color: purple), title: Text(item.$1, style: const TextStyle(color: ink, fontWeight: FontWeight.w700)), subtitle: Text(item.$2, style: const TextStyle(color: muted)), trailing: const Icon(Icons.chevron_right), onTap: () => showDialog<void>(context: context, builder: (c) => AlertDialog(title: Text(item.$1), content: const Text('Support content will be added before production release.'), actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text('Close'))])))),
     const SizedBox(height: 14), const Center(child: Text('TryOut Support • Phase 1 UI', style: TextStyle(color: muted)))
   ]);
+  double _modelAngle = 0;
+  Widget _threeDScreen() => StatefulBuilder(builder: (context, setViewerState) {
+    return ListView(padding: const EdgeInsets.all(18), children: [
+      const Text('3D Model Viewer', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: ink)),
+      const SizedBox(height: 6),
+      const Text('Drag left or right to explore the front, side and back view.', style: TextStyle(color: muted)),
+      const SizedBox(height: 18),
+      GestureDetector(
+        onHorizontalDragUpdate: (details) => setViewerState(() => _modelAngle = (_modelAngle + details.delta.dx * 0.012) % (2 * 3.141592653589793)),
+        child: Container(height: 420, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), border: Border.all(color: const Color(0xFFE6DFFF))),
+          child: Stack(alignment: Alignment.center, children: [
+            Positioned(top: 16, left: 16, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6), decoration: BoxDecoration(color: purpleLight, borderRadius: BorderRadius.circular(20)), child: const Text('360° PREVIEW', style: TextStyle(color: purple, fontSize: 11, fontWeight: FontWeight.w800)))),
+            if (widget.person.value != null)
+              Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()..setEntry(3, 2, 0.001)..rotateY(_modelAngle),
+                child: SizedBox(width: 250, height: 340, child: Image.file(File(widget.person.value!.path), fit: BoxFit.contain)),
+              )
+            else
+              Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()..setEntry(3, 2, 0.001)..rotateY(_modelAngle),
+                child: Container(width: 190, height: 290, decoration: BoxDecoration(color: purpleLight, borderRadius: BorderRadius.circular(100)), child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.accessibility_new, size: 100, color: purple), Text('3D model preview', style: TextStyle(color: ink, fontWeight: FontWeight.w700))])),
+              ),
+            Positioned(bottom: 16, child: Text('Angle: ${((_modelAngle * 180 / 3.141592653589793) % 360).round()}°', style: const TextStyle(color: muted, fontWeight: FontWeight.w700))),
+          ]),
+        ),
+      ),
+      const SizedBox(height: 14),
+      Row(children: [
+        Expanded(child: OutlinedButton.icon(onPressed: () => setViewerState(() => _modelAngle = 0), icon: const Icon(Icons.face), label: const Text('Front'))),
+        const SizedBox(width: 8),
+        Expanded(child: OutlinedButton.icon(onPressed: () => setViewerState(() => _modelAngle = 1.57079632679), icon: const Icon(Icons.rotate_90_degrees_ccw), label: const Text('Side'))),
+        const SizedBox(width: 8),
+        Expanded(child: OutlinedButton.icon(onPressed: () => setViewerState(() => _modelAngle = 3.14159265359), icon: const Icon(Icons.sync), label: const Text('Back'))),
+      ]),
+      const SizedBox(height: 12),
+      FilledButton.icon(onPressed: () => choosePhoto(true), icon: const Icon(Icons.person_add_alt_1), label: const Text('Load Your Photo')),
+      const SizedBox(height: 10),
+      const Text('Phase 1 viewer: drag/angle controls and screen UI are implemented, but this is not a true 3D body mesh. Real front/side/back geometry requires a 3D model or reconstruction pipeline, which will be integrated separately after the UI phase.', style: TextStyle(color: muted, height: 1.45, fontSize: 12)),
+    ]);
+  });
   Widget _menuScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('TryOut', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 8), const Text('Virtual Try-On', style: TextStyle(color: muted)), const SizedBox(height: 20),
-    for (final item in [(Icons.home_outlined,'Home',4),(Icons.checkroom,'Try On',5),(Icons.grid_view,'My Looks',15),(Icons.checkroom_outlined,'My Wardrobe',14),(Icons.history,'History',15),(Icons.person_outline,'Profile',16),(Icons.settings_outlined,'Settings',17),(Icons.help_outline,'Help & Support',18)]) ListTile(leading: Icon(item.$1, color: purple), title: Text(item.$2, style: const TextStyle(color: ink)), trailing: const Icon(Icons.chevron_right), onTap: () => go(item.$3)),
+    for (final item in [(Icons.home_outlined,'Home',4),(Icons.checkroom,'Try On',5),(Icons.view_in_ar,'3D View — Rotate Model',20),(Icons.grid_view,'My Looks',15),(Icons.checkroom_outlined,'My Wardrobe',14),(Icons.history,'History',15),(Icons.person_outline,'Profile',16),(Icons.settings_outlined,'Settings',17),(Icons.help_outline,'Help & Support',18)]) ListTile(leading: Icon(item.$1, color: purple), title: Text(item.$2, style: const TextStyle(color: ink)), trailing: const Icon(Icons.chevron_right), onTap: () => go(item.$3)),
     const Divider(), ListTile(leading: const Icon(Icons.logout, color: purple), title: const Text('Log out / Guest mode', style: TextStyle(color: ink)), onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('You are using TryOut in guest mode.'))))
   ]);
 }
