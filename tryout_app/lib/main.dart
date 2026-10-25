@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'try_on_service.dart';
 
 void main() => runApp(const TryOutApp());
 
@@ -131,37 +132,77 @@ class HomePage extends StatelessWidget {
   ]);
 }
 
-class TryOnPage extends StatelessWidget {
+class TryOnPage extends StatefulWidget {
   final ValueNotifier<XFile?> person;
   final ValueNotifier<XFile?> garment;
   final Future<void> Function(bool, ImageSource) onPick;
   const TryOnPage({super.key, required this.person, required this.garment, required this.onPick});
+  @override
+  State<TryOnPage> createState() => _TryOnPageState();
+}
+
+class _TryOnPageState extends State<TryOnPage> {
+  final _service = TryOnService();
+  bool _processing = false;
+  String? _error;
+  Uri? _result;
+
+  Future<void> _generate() async {
+    final personFile = widget.person.value;
+    final garmentFile = widget.garment.value;
+    if (personFile == null || garmentFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please choose both photos first.')));
+      return;
+    }
+    setState(() { _processing = true; _error = null; _result = null; });
+    try {
+      final result = await _service.generate(person: personFile, garment: garmentFile);
+      if (!mounted) return;
+      setState(() => _result = result);
+    } on Exception catch (e) {
+      if (!mounted) return;
+      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      if (mounted) setState(() => _processing = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => ListView(padding: const EdgeInsets.all(20), children: [
     const Text('Create your look', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w800)),
     const SizedBox(height: 6),
     const Text('Add a person photo and a clothing photo.', style: TextStyle(color: muted)),
     const SizedBox(height: 22),
-    ValueListenableBuilder<XFile?>(valueListenable: person, builder: (context, file, _) => PhotoPickerCard(title: 'Your photo', subtitle: 'Full body works best', icon: Icons.person_outline, file: file, onTap: () => _sourceSheet(context, true))),
+    ValueListenableBuilder<XFile?>(valueListenable: widget.person, builder: (context, file, _) => PhotoPickerCard(title: 'Your photo', subtitle: 'Full body works best', icon: Icons.person_outline, file: file, onTap: () => _sourceSheet(context, true))),
     const SizedBox(height: 14),
-    ValueListenableBuilder<XFile?>(valueListenable: garment, builder: (context, file, _) => PhotoPickerCard(title: 'Clothing photo', subtitle: 'Use a clear front view', icon: Icons.checkroom, file: file, onTap: () => _sourceSheet(context, false))),
+    ValueListenableBuilder<XFile?>(valueListenable: widget.garment, builder: (context, file, _) => PhotoPickerCard(title: 'Clothing photo', subtitle: 'Use a clear front view', icon: Icons.checkroom, file: file, onTap: () => _sourceSheet(context, false))),
     const SizedBox(height: 24),
     FilledButton.icon(
-      onPressed: () {
-        if (person.value == null || garment.value == null) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please choose both photos first.')));
-          return;
-        }
-        showDialog<void>(context: context, builder: (context) => AlertDialog(
-          title: const Text('AI model validation in progress'),
-          content: const Text('Your photos are selected locally. Real try-on generation is not connected yet; we will enable it after an on-device model passes 4 GB RAM testing. No fake result will be shown.'),
-          actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))],
-        ));
-      },
-      icon: const Icon(Icons.auto_awesome), label: const Text('Generate try-on'), style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
+      onPressed: _processing ? null : _generate,
+      icon: _processing
+          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+          : const Icon(Icons.auto_awesome),
+      label: Text(_processing ? 'Generating your look…' : 'Generate try-on'),
+      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
     ),
+    if (_processing) ...[
+      const SizedBox(height: 12),
+      const Text('AI is processing your photos. This may take a little while.', textAlign: TextAlign.center, style: TextStyle(color: muted, fontSize: 12)),
+    ],
+    if (_error != null) ...[
+      const SizedBox(height: 14),
+      Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: const Color(0xFF321D2A), borderRadius: BorderRadius.circular(14)), child: Text(_error!, style: const TextStyle(color: Color(0xFFFFB9C6)))),
+    ],
+    if (_result != null) ...[
+      const SizedBox(height: 22),
+      const Text('Your generated look', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+      const SizedBox(height: 12),
+      ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.network(_result.toString(), fit: BoxFit.contain, loadingBuilder: (context, child, progress) => progress == null ? child : const SizedBox(height: 240, child: Center(child: CircularProgressIndicator())), errorBuilder: (context, error, stack) => const Padding(padding: EdgeInsets.all(18), child: Text('The generated image could not be loaded. Please try again.')))),
+      const SizedBox(height: 8),
+      const Text('AI-generated preview. Fit and size are not guaranteed.', textAlign: TextAlign.center, style: TextStyle(color: muted, fontSize: 12)),
+    ],
     const SizedBox(height: 12),
-    const Text('Privacy-first: photo selection stays on this device in this starter build.', textAlign: TextAlign.center, style: TextStyle(color: muted, fontSize: 12)),
+    const Text('Your selected photos are sent to the AI provider through the TryOut server to generate this result.', textAlign: TextAlign.center, style: TextStyle(color: muted, fontSize: 12)),
   ]);
 
   void _sourceSheet(BuildContext context, bool isPerson) {
@@ -169,8 +210,8 @@ class TryOnPage extends StatelessWidget {
       padding: const EdgeInsets.all(20), child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(isPerson ? 'Choose your photo' : 'Choose clothing photo', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
-        ListTile(leading: const Icon(Icons.photo_library_outlined), title: const Text('Gallery'), onTap: () { Navigator.pop(ctx); onPick(isPerson, ImageSource.gallery); }),
-        ListTile(leading: const Icon(Icons.camera_alt_outlined), title: const Text('Camera'), onTap: () { Navigator.pop(ctx); onPick(isPerson, ImageSource.camera); }),
+        ListTile(leading: const Icon(Icons.photo_library_outlined), title: const Text('Gallery'), onTap: () { Navigator.pop(ctx); widget.onPick(isPerson, ImageSource.gallery); }),
+        ListTile(leading: const Icon(Icons.camera_alt_outlined), title: const Text('Camera'), onTap: () { Navigator.pop(ctx); widget.onPick(isPerson, ImageSource.camera); }),
       ]),
     )));
   }
