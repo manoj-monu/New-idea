@@ -23,6 +23,8 @@ jobs:
         with:
           channel: stable
           cache: true
+      - name: Generate Android platform scaffolding
+        run: flutter create . --platforms=android --project-name tryout_app
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze
