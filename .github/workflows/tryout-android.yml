@@ -1,0 +1,39 @@
+name: TryOut Android CI
+
+on:
+  push:
+    paths:
+      - "tryout_app/**"
+      - ".github/workflows/tryout-android.yml"
+  pull_request:
+    paths:
+      - "tryout_app/**"
+      - ".github/workflows/tryout-android.yml"
+  workflow_dispatch:
+
+jobs:
+  flutter-check-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tryout_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: flutter test
+      - name: Build debug APK
+        run: flutter build apk --debug
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: tryout-debug-apk
+          path: tryout_app/build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 7
