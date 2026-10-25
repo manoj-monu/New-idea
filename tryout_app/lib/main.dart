@@ -46,7 +46,7 @@ class _AppShellState extends State<AppShell> {
   }
   void open(int index) => Navigator.of(context).push(MaterialPageRoute(builder: (_) => AppScreen(
     index: index, person: person, garment: garment, pick: pick, savedLooks: savedLooks,
-    onSave: (file) { setState(() { if (!savedLooks.any((f) => f.path == file.path)) savedLooks.add(file); }); }));
+    onSave: (file) { setState(() { if (!savedLooks.any((f) => f.path == file.path)) savedLooks.add(file); }); })));
   @override void dispose() { person.dispose(); garment.dispose(); super.dispose(); }
   @override Widget build(BuildContext context) => Scaffold(
     body: SafeArea(child: IndexedStack(index: tab, children: [
@@ -200,7 +200,7 @@ class _AppScreenState extends State<AppScreen> {
   Widget _editScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Edit Look', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 16),
     Container(height: 310, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)), child: Center(child: widget.person.value == null ? const Icon(Icons.person, color: purple, size: 80) : Image.file(File(widget.person.value!.path), fit: BoxFit.contain))),
-    const SizedBox(height: 14), Wrap(spacing: 8, runSpacing: 8, children: ['Crop','Adjust','Filter','Background'].map((s) => ActionChip(label: Text(s), avatar: const Icon(Icons.tune, size: 16, color: purple), onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$s editing will be wired after the UI pass.')))).toList()),
+    const SizedBox(height: 14), Wrap(spacing: 8, runSpacing: 8, children: ['Crop','Adjust','Filter','Background'].map((s) => ActionChip(label: Text(s), avatar: const Icon(Icons.tune, size: 16, color: purple), onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$s editing will be wired after the UI pass.'))))).toList()),
     const SizedBox(height: 18), FilledButton(onPressed: () => go(13), child: const Text('Save Changes'))
   ]);
   Widget _saveShareScreen() => ListView(padding: const EdgeInsets.all(18), children: [
