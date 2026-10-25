@@ -4,11 +4,11 @@ import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(const TryOutApp());
 
-const purple = Color(0xFF5420C8);
-const purpleLight = Color(0xFFF0E9FF);
-const ink = Color(0xFF17123A);
-const muted = Color(0xFF77758D);
-const pageBg = Color(0xFFFAF9FF);
+const purple = Color(0xFFE83DFF);
+const purpleLight = Color(0xFF25112F);
+const ink = Color(0xFFF8F5FF);
+const muted = Color(0xFFB8B1C8);
+const pageBg = Color(0xFF070812);
 const categories = ['Women', 'Men', 'Kids'];
 const clothes = ['Tops', 'Dresses', 'Jeans', 'Jackets', 'Sarees', 'Traditional', 'Sportswear', 'Innerwear', 'Shirts'];
 const screenTitles = ['Splash Screen','Onboarding 1','Onboarding 2','Onboarding 3','Home Screen','Choose Category','Select Clothing','Choose Your Photo','Crop Photo','Choose Clothing Photo','Processing','Try-On Result','Edit Look','Save & Share','My Wardrobe','My Looks / History','Profile','Settings','Help & Support','Side Menu','3D View'];
@@ -17,9 +17,9 @@ class TryOutApp extends StatelessWidget {
   const TryOutApp({super.key});
   @override Widget build(BuildContext context) => MaterialApp(
     title: 'TryOut', debugShowCheckedModeBanner: false,
-    theme: ThemeData(useMaterial3: true, scaffoldBackgroundColor: pageBg,
-      colorScheme: ColorScheme.fromSeed(seedColor: purple),
-      appBarTheme: const AppBarTheme(backgroundColor: pageBg, foregroundColor: ink),
+    theme: ThemeData(useMaterial3: true, brightness: Brightness.dark, scaffoldBackgroundColor: pageBg,
+      colorScheme: ColorScheme.fromSeed(seedColor: purple, brightness: Brightness.dark),
+      appBarTheme: const AppBarTheme(backgroundColor: pageBg, foregroundColor: ink, elevation: 0),
       filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(
         backgroundColor: purple, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)))),
@@ -155,7 +155,7 @@ class _AppScreenState extends State<AppScreen> {
   ])));
   Widget _categoryScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Choose Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 18),
-    Wrap(spacing: 8, children: List.generate(categories.length, (i) => ChoiceChip(label: Text(categories[i]), selected: selectedCategory == i, onSelected: (_) => setState(() => selectedCategory = i))),
+    Wrap(spacing: 8, children: List.generate(categories.length, (i) => ChoiceChip(label: Text(categories[i]), selected: selectedCategory == i, onSelected: (_) => setState(() => selectedCategory = i)))),
     const SizedBox(height: 22), const Text('Explore styles', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: ink)),
     const SizedBox(height: 12), GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: clothes.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: .82, crossAxisSpacing: 10, mainAxisSpacing: 10), itemBuilder: (_, i) => InkWell(onTap: () { selectedGarment = i; go(6); }, child: Container(decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE6DFFF))), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.checkroom, color: purple, size: 38), const SizedBox(height: 8), Text(clothes[i], style: const TextStyle(color: ink, fontWeight: FontWeight.w600))])))),
     const SizedBox(height: 18), FilledButton(onPressed: () => go(7), child: const Text('Next: Choose Photo'))
@@ -229,8 +229,8 @@ class _AppScreenState extends State<AppScreen> {
   ]);
   Widget _settingsScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Settings', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 12),
-    SwitchListTile(value: notifications, activeColor: purple, title: const Text('Notifications', style: TextStyle(color: ink)), subtitle: const Text('Feature updates and reminders', style: TextStyle(color: muted)), onChanged: (v) => setState(() => notifications = v)),
-    SwitchListTile(value: darkMode, activeColor: purple, title: const Text('Dark Mode', style: TextStyle(color: ink)), subtitle: const Text('Theme preference preview', style: TextStyle(color: muted)), onChanged: (v) => setState(() => darkMode = v)),
+    SwitchListTile(value: notifications, activeThumbColor: purple, title: const Text('Notifications', style: TextStyle(color: ink)), subtitle: const Text('Feature updates and reminders', style: TextStyle(color: muted)), onChanged: (v) => setState(() => notifications = v)),
+    SwitchListTile(value: darkMode, activeThumbColor: purple, title: const Text('Dark Mode', style: TextStyle(color: ink)), subtitle: const Text('Theme preference preview', style: TextStyle(color: muted)), onChanged: (v) => setState(() => darkMode = v)),
     for (final s in ['Language','Privacy Policy','Terms & Conditions','Clear Cache','About App']) ListTile(leading: const Icon(Icons.chevron_right, color: purple), title: Text(s, style: const TextStyle(color: ink)), onTap: () => showDialog<void>(context: context, builder: (c) => AlertDialog(title: Text(s), content: const Text('This settings destination will be connected in the next implementation pass.'), actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text('OK'))])))
   ]);
   Widget _helpScreen() => ListView(padding: const EdgeInsets.all(18), children: [
