@@ -55,7 +55,7 @@ class _AppShellState extends State<AppShell> {
       AppScreen(index: 15, person: person, garment: garment, pick: pick, savedLooks: savedLooks, onSave: (_) {}),
       AppScreen(index: 16, person: person, garment: garment, pick: pick, savedLooks: savedLooks, onSave: (_) {}),
     ])),
-    bottomNavigationBar: NavigationBar(backgroundColor: Colors.white, indicatorColor: purpleLight, selectedIndex: tab,
+    bottomNavigationBar: NavigationBar(backgroundColor: const Color(0xFF10111D), indicatorColor: const Color(0xFF432047), selectedIndex: tab,
       onDestinationSelected: (i) => setState(() => tab = i),
       destinations: const [
         NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text('Virtual Try-On', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900)),
         const SizedBox(height: 8), const Text('Try clothes before you buy', style: TextStyle(color: Colors.white70)),
-        const Spacer(), Align(alignment: Alignment.bottomLeft, child: FilledButton(onPressed: () => onOpen(5), style: FilledButton.styleFrom(backgroundColor: Colors.white, foregroundColor: purple), child: const Text('Try Now  →')))
+        const Spacer(), Align(alignment: Alignment.bottomLeft, child: FilledButton(onPressed: () => onOpen(5), style: FilledButton.styleFrom(backgroundColor: const Color(0xFFF05BFF), foregroundColor: const Color(0xFF100A18)), child: const Text('Try Now  →')))
       ])),
     const SizedBox(height: 24), const Text('Quick Actions', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: ink)),
     const SizedBox(height: 12), Row(children: [
@@ -94,7 +94,7 @@ class ActionCard extends StatelessWidget {
   final IconData icon; final String title; final VoidCallback onTap;
   const ActionCard({super.key, required this.icon, required this.title, required this.onTap});
   @override Widget build(BuildContext context) => InkWell(onTap: onTap, borderRadius: BorderRadius.circular(18),
-    child: Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFFE6DFFF))),
+    child: Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16), decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFF392343))),
       child: Column(children: [Icon(icon, color: purple, size: 26), const SizedBox(height: 8), Text(title, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11, color: ink))])));
 }
 
@@ -157,13 +157,13 @@ class _AppScreenState extends State<AppScreen> {
     const Text('Choose Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 18),
     Wrap(spacing: 8, children: List.generate(categories.length, (i) => ChoiceChip(label: Text(categories[i]), selected: selectedCategory == i, onSelected: (_) => setState(() => selectedCategory = i)))),
     const SizedBox(height: 22), const Text('Explore styles', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: ink)),
-    const SizedBox(height: 12), GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: clothes.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: .82, crossAxisSpacing: 10, mainAxisSpacing: 10), itemBuilder: (_, i) => InkWell(onTap: () { selectedGarment = i; go(6); }, child: Container(decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE6DFFF))), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.checkroom, color: purple, size: 38), const SizedBox(height: 8), Text(clothes[i], style: const TextStyle(color: ink, fontWeight: FontWeight.w600))])))),
+    const SizedBox(height: 12), GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: clothes.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: .82, crossAxisSpacing: 10, mainAxisSpacing: 10), itemBuilder: (_, i) => InkWell(onTap: () { selectedGarment = i; go(6); }, child: Container(decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE6DFFF))), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.checkroom, color: purple, size: 38), const SizedBox(height: 8), Text(clothes[i], style: const TextStyle(color: ink, fontWeight: FontWeight.w600))])))),
     const SizedBox(height: 18), FilledButton(onPressed: () => go(7), child: const Text('Next: Choose Photo'))
   ]);
   Widget _clothingScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Select Clothing', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)),
     const SizedBox(height: 12), Wrap(spacing: 8, children: ['Tops','Dresses','Jeans'].map((s) => ChoiceChip(label: Text(s), selected: false, onSelected: (_) {})).toList()),
-    const SizedBox(height: 18), Container(height: 190, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFE6DFFF))), child: widget.garment.value == null ? const Center(child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.checkroom, size: 56, color: purple), SizedBox(height: 8), Text('Choose a clothing photo', style: TextStyle(color: ink))])) : ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.file(File(widget.garment.value!.path), fit: BoxFit.contain))),
+    const SizedBox(height: 18), Container(height: 190, decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFE6DFFF))), child: widget.garment.value == null ? const Center(child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.checkroom, size: 56, color: purple), SizedBox(height: 8), Text('Choose a clothing photo', style: TextStyle(color: ink))])) : ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.file(File(widget.garment.value!.path), fit: BoxFit.contain))),
     const SizedBox(height: 14), OutlinedButton.icon(onPressed: () => choosePhoto(false), icon: const Icon(Icons.photo_library), label: const Text('Upload Clothing Photo')),
     const SizedBox(height: 10), FilledButton(onPressed: () => go(9), child: const Text('Next'))
   ]);
@@ -179,7 +179,7 @@ class _AppScreenState extends State<AppScreen> {
   }
   Widget _cropScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Crop Photo', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 14),
-    Container(height: 390, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)), child: widget.person.value == null ? const Text('Choose a photo first', style: TextStyle(color: muted)) : Image.file(File(widget.person.value!.path), fit: BoxFit.contain)),
+    Container(height: 390, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(20)), child: widget.person.value == null ? const Text('Choose a photo first', style: TextStyle(color: muted)) : Image.file(File(widget.person.value!.path), fit: BoxFit.contain)),
     const SizedBox(height: 12), const Text('Preview is available. Fine crop/rotate controls will be added as a separate image-editing implementation.', style: TextStyle(color: muted)),
     const SizedBox(height: 14), FilledButton(onPressed: () => go(9), child: const Text('Done'))
   ]);
@@ -235,7 +235,7 @@ class _AppScreenState extends State<AppScreen> {
   ]);
   Widget _helpScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Help & Support', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 12),
-    for (final item in [('Frequently Asked Questions','Common questions'),('Contact Us','Get in touch with support'),('Report a Problem','Help us improve')]) Card(color: Colors.white, child: ListTile(leading: const Icon(Icons.help_outline, color: purple), title: Text(item.$1, style: const TextStyle(color: ink, fontWeight: FontWeight.w700)), subtitle: Text(item.$2, style: const TextStyle(color: muted)), trailing: const Icon(Icons.chevron_right), onTap: () => showDialog<void>(context: context, builder: (c) => AlertDialog(title: Text(item.$1), content: const Text('Support content will be added before production release.'), actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text('Close'))])))),
+    for (final item in [('Frequently Asked Questions','Common questions'),('Contact Us','Get in touch with support'),('Report a Problem','Help us improve')]) Card(color: const Color(0xFF151625), child: ListTile(leading: const Icon(Icons.help_outline, color: purple), title: Text(item.$1, style: const TextStyle(color: ink, fontWeight: FontWeight.w700)), subtitle: Text(item.$2, style: const TextStyle(color: muted)), trailing: const Icon(Icons.chevron_right), onTap: () => showDialog<void>(context: context, builder: (c) => AlertDialog(title: Text(item.$1), content: const Text('Support content will be added before production release.'), actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text('Close'))])))),
     const SizedBox(height: 14), const Center(child: Text('TryOut Support • Phase 1 UI', style: TextStyle(color: muted)))
   ]);
   double _modelAngle = 0;
@@ -247,7 +247,7 @@ class _AppScreenState extends State<AppScreen> {
       const SizedBox(height: 18),
       GestureDetector(
         onHorizontalDragUpdate: (details) => setViewerState(() => _modelAngle = (_modelAngle + details.delta.dx * 0.012) % (2 * 3.141592653589793)),
-        child: Container(height: 420, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), border: Border.all(color: const Color(0xFFE6DFFF))),
+        child: Container(height: 420, decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(24), border: Border.all(color: const Color(0xFFE6DFFF))),
           child: Stack(alignment: Alignment.center, children: [
             Positioned(top: 16, left: 16, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6), decoration: BoxDecoration(color: purpleLight, borderRadius: BorderRadius.circular(20)), child: const Text('360° PREVIEW', style: TextStyle(color: purple, fontSize: 11, fontWeight: FontWeight.w800)))),
             if (widget.person.value != null)
