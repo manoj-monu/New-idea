@@ -68,27 +68,70 @@ class _AppShellState extends State<AppShell> {
 class HomeScreen extends StatelessWidget {
   final void Function(int) onOpen;
   const HomeScreen({super.key, required this.onOpen});
-  @override Widget build(BuildContext context) => ListView(padding: const EdgeInsets.fromLTRB(18, 16, 18, 28), children: [
-    Row(children: [const Icon(Icons.checkroom, color: purple, size: 30), const SizedBox(width: 8),
-      const Expanded(child: Text('TryOut', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: ink))),
-      IconButton(onPressed: () => onOpen(19), icon: const Icon(Icons.menu, color: ink))]),
-    Container(height: 225, margin: const EdgeInsets.only(top: 10), padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), gradient: const LinearGradient(colors: [Color(0xFF32108F), Color(0xFF8A43E8)], begin: Alignment.topLeft, end: Alignment.bottomRight)),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('Virtual Try-On', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900)),
-        const SizedBox(height: 8), const Text('Try clothes before you buy', style: TextStyle(color: Colors.white70)),
-        const Spacer(), Align(alignment: Alignment.bottomLeft, child: FilledButton(onPressed: () => onOpen(5), style: FilledButton.styleFrom(backgroundColor: const Color(0xFFF05BFF), foregroundColor: const Color(0xFF100A18)), child: const Text('Try Now  →')))
-      ])),
-    const SizedBox(height: 24), const Text('Quick Actions', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: ink)),
-    const SizedBox(height: 12), Row(children: [
-      Expanded(child: ActionCard(icon: Icons.auto_awesome, title: 'Try On Clothes', onTap: () => onOpen(5))),
-      const SizedBox(width: 8), Expanded(child: ActionCard(icon: Icons.photo_library_outlined, title: 'My Photos', onTap: () => onOpen(7))),
-      const SizedBox(width: 8), Expanded(child: ActionCard(icon: Icons.favorite_border, title: 'My Looks', onTap: () => onOpen(15))),
-    ]),
-    const SizedBox(height: 24), const Text('Popular Categories', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: ink)),
-    const SizedBox(height: 12), Wrap(spacing: 8, runSpacing: 8, children: ['Women','Men','Kids','Traditional'].map((s) => ActionChip(label: Text(s), avatar: const Icon(Icons.checkroom, size: 18, color: purple), onPressed: () => onOpen(6))).toList()),
-    const SizedBox(height: 20), const Text('Phase 1: screens and navigation. Real AI generation will be integrated in Phase 2; this build never fabricates a try-on result.', style: TextStyle(color: muted, height: 1.45)),
-  ]);
+  @override Widget build(BuildContext context) => Container(
+    decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF090815), Color(0xFF070812), Color(0xFF10091D)])),
+    child: ListView(padding: const EdgeInsets.fromLTRB(18, 12, 18, 28), children: [
+      Row(children: [
+        Container(width: 42, height: 42, decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), gradient: const LinearGradient(colors: [Color(0xFFFF36DE), Color(0xFF792BFF)])), child: const Icon(Icons.checkroom_rounded, color: Colors.white, size: 27)),
+        const SizedBox(width: 10),
+        const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('TryOut', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: ink, height: 1.0)),
+          SizedBox(height: 3), Text('AI VIRTUAL TRY-ON', style: TextStyle(fontSize: 9, letterSpacing: 2.1, fontWeight: FontWeight.w800, color: muted))
+        ])),
+        Container(decoration: BoxDecoration(color: const Color(0xFF21152D), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFFC857))), child: TextButton.icon(onPressed: () => onOpen(16), icon: const Icon(Icons.workspace_premium, color: Color(0xFFFFC857), size: 17), label: const Text('PRO', style: TextStyle(color: Color(0xFFFFD875), fontWeight: FontWeight.w900)))
+      ]),
+      const SizedBox(height: 20),
+      Container(padding: const EdgeInsets.all(20), decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF32106C), Color(0xFF7518A8), Color(0xFF21104D)]),
+        border: Border.all(color: const Color(0xFFDA49FF), width: 1.2),
+        boxShadow: [BoxShadow(color: purple.withValues(alpha: .20), blurRadius: 24, spreadRadius: 1)]),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('YOUR NEXT LOOK\nSTARTS HERE', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          const SizedBox(height: 10),
+          const Text('Try Any Outfit\nwith AI', style: TextStyle(color: Colors.white, fontSize: 30, height: 1.03, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 10),
+          const Text('Choose a photo, pick a style, and explore your look.', style: TextStyle(color: Colors.white.withValues(alpha: .86), height: 1.4)),
+          const SizedBox(height: 18),
+          Row(children: [
+            Expanded(child: FilledButton.icon(onPressed: () => onOpen(5), icon: const Icon(Icons.auto_awesome, size: 18), label: const Text('Try Now'), style: FilledButton.styleFrom(backgroundColor: const Color(0xFFFF3DE4), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14)))),
+            const SizedBox(width: 10),
+            OutlinedButton(onPressed: () => onOpen(15), style: OutlinedButton.styleFrom(foregroundColor: Colors.white, side: const BorderSide(color: Colors.white54), padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14)), child: const Icon(Icons.photo_library_outlined))
+          ]),
+          const SizedBox(height: 15),
+          Row(children: [
+            _heroPill(Icons.photo_camera_outlined, 'Your photo'),
+            const SizedBox(width: 7), const Icon(Icons.arrow_forward, color: Colors.white70, size: 16),
+            const SizedBox(width: 7), _heroPill(Icons.checkroom_outlined, 'Choose style'),
+            const SizedBox(width: 7), const Icon(Icons.arrow_forward, color: Colors.white70, size: 16),
+            const SizedBox(width: 7), _heroPill(Icons.auto_awesome, 'Preview')
+          ])
+        ])),
+      const SizedBox(height: 25),
+      Row(children: [const Expanded(child: Text('Quick Actions', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: ink))), TextButton(onPressed: () => onOpen(5), child: const Text('See all  →', style: TextStyle(color: purple)))]),
+      const SizedBox(height: 9),
+      Row(children: [
+        Expanded(child: _homeAction(Icons.checkroom_rounded, 'Try Outfit', 'Start a look', () => onOpen(5))),
+        const SizedBox(width: 9), Expanded(child: _homeAction(Icons.photo_library_outlined, 'My Photos', 'Choose photo', () => onOpen(7))),
+        const SizedBox(width: 9), Expanded(child: _homeAction(Icons.favorite_border_rounded, 'My Looks', 'Saved looks', () => onOpen(15)))
+      ]),
+      const SizedBox(height: 25),
+      Row(children: [const Expanded(child: Text('Browse Categories', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: ink))), TextButton(onPressed: () => onOpen(5), child: const Text('See all  →', style: TextStyle(color: purple)))]),
+      const SizedBox(height: 10),
+      GridView.count(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), crossAxisCount: 4, mainAxisSpacing: 9, crossAxisSpacing: 9, childAspectRatio: .82, children: [
+        _categoryTile(Icons.checkroom, 'Tops', () => onOpen(6)), _categoryTile(Icons.dry_cleaning, 'Dresses', () => onOpen(6)),
+        _categoryTile(Icons.work_outline, 'Formal', () => onOpen(6)), _categoryTile(Icons.directions_run, 'Sporty', () => onOpen(6)),
+        _categoryTile(Icons.woman_2_outlined, 'Traditional', () => onOpen(6)), _categoryTile(Icons.style_outlined, 'Jackets', () => onOpen(6)),
+        _categoryTile(Icons.face_3_outlined, 'Kids', () => onOpen(6)), _categoryTile(Icons.grid_view_rounded, 'All Styles', () => onOpen(6))
+      ]),
+      const SizedBox(height: 24),
+      Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: const Color(0xFF11101E), borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFF40204F))), child: const Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.info_outline, color: purple), SizedBox(width: 10), Expanded(child: Text('Preview build: photo selection and navigation are available. Real AI-generated clothing results will be enabled after the UI pass and AI service integration.', style: TextStyle(color: muted, height: 1.45, fontSize: 12)))
+      ]))
+    ]));
+  static Widget _heroPill(IconData icon, String label) => Flexible(child: Container(padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 8), decoration: BoxDecoration(color: Colors.black.withValues(alpha: .18), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white24)), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(icon, color: Colors.white, size: 13), const SizedBox(width: 4), Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700)))])));
+  static Widget _homeAction(IconData icon, String title, String subtitle, VoidCallback tap) => InkWell(onTap: tap, borderRadius: BorderRadius.circular(18), child: Container(padding: const EdgeInsets.fromLTRB(8, 15, 8, 14), decoration: BoxDecoration(color: const Color(0xFF151321), borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFF44214F))), child: Column(children: [Container(width: 42, height: 42, decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), gradient: const LinearGradient(colors: [Color(0xFF44205C), Color(0xFF24123B)])), child: Icon(icon, color: purple, size: 23)), const SizedBox(height: 9), Text(title, textAlign: TextAlign.center, style: const TextStyle(color: ink, fontSize: 12, fontWeight: FontWeight.w800)), const SizedBox(height: 3), Text(subtitle, textAlign: TextAlign.center, style: const TextStyle(color: muted, fontSize: 9))])));
+  static Widget _categoryTile(IconData icon, String title, VoidCallback tap) => InkWell(onTap: tap, borderRadius: BorderRadius.circular(15), child: Container(decoration: BoxDecoration(color: const Color(0xFF151321), borderRadius: BorderRadius.circular(15), border: Border.all(color: const Color(0xFF35213F))), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(icon, color: purple, size: 27), const SizedBox(height: 8), Text(title, textAlign: TextAlign.center, style: const TextStyle(color: ink, fontSize: 10, fontWeight: FontWeight.w700))])));
 }
 class ActionCard extends StatelessWidget {
   final IconData icon; final String title; final VoidCallback onTap;
