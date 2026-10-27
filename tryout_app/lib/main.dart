@@ -196,13 +196,48 @@ class _AppScreenState extends State<AppScreen> {
     const SizedBox(height: 22), Text(footer, style: const TextStyle(color: muted, fontSize: 12)),
     const SizedBox(height: 26), SizedBox(width: double.infinity, child: FilledButton(onPressed: action, child: Text(button)))
   ])));
-  Widget _categoryScreen() => ListView(padding: const EdgeInsets.all(18), children: [
-    const Text('Choose Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 18),
+  static const _garmentImages = <String>[
+    'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1610030469668-8e9f641aafc8?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?w=600&auto=format&fit=crop',
+  ];
+  Widget _categoryScreen() => ListView(padding: const EdgeInsets.fromLTRB(18, 18, 18, 28), children: [
+    const Text('Choose Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)),
+    const SizedBox(height: 18),
     Wrap(spacing: 8, children: List.generate(categories.length, (i) => ChoiceChip(label: Text(categories[i]), selected: selectedCategory == i, onSelected: (_) => setState(() => selectedCategory = i)))),
-    const SizedBox(height: 22), const Text('Explore styles', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: ink)),
-    const SizedBox(height: 12), GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: clothes.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: .82, crossAxisSpacing: 10, mainAxisSpacing: 10), itemBuilder: (_, i) => InkWell(onTap: () { selectedGarment = i; go(6); }, child: Container(decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE6DFFF))), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.checkroom, color: purple, size: 38), const SizedBox(height: 8), Text(clothes[i], style: const TextStyle(color: ink, fontWeight: FontWeight.w600))])))),
-    const SizedBox(height: 18), FilledButton(onPressed: () => go(7), child: const Text('Next: Choose Photo'))
+    const SizedBox(height: 22),
+    const Text('Explore styles', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: ink)),
+    const SizedBox(height: 12),
+    GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: clothes.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: .76, crossAxisSpacing: 10, mainAxisSpacing: 10),
+      itemBuilder: (_, i) {
+        final selected = selectedGarment == i;
+        return InkWell(
+          onTap: () => setState(() => selectedGarment = i),
+          borderRadius: BorderRadius.circular(17),
+          child: AnimatedContainer(duration: const Duration(milliseconds: 180),
+            decoration: BoxDecoration(color: const Color(0xFF151625), borderRadius: BorderRadius.circular(17), border: Border.all(color: selected ? purple : const Color(0xFFE6DFFF), width: selected ? 2.5 : 1.2), boxShadow: selected ? [BoxShadow(color: purple.withValues(alpha: .24), blurRadius: 14)] : []),
+            child: Stack(children: [
+              Positioned.fill(child: ClipRRect(borderRadius: BorderRadius.circular(15), child: Image.network(_garmentImages[i], fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(color: const Color(0xFF20172B), child: Icon(_garmentIcon(i), color: purple, size: 44))))),
+              Positioned.fill(child: DecoratedBox(decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Color(0xCC070812)])))),
+              if (selected) const Positioned(top: 8, right: 8, child: CircleAvatar(radius: 13, backgroundColor: purple, child: Icon(Icons.check, size: 17, color: Colors.white))),
+              Positioned(left: 6, right: 6, bottom: 10, child: Text(clothes[i], textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12))),
+            ])));
+      }),
+    const SizedBox(height: 18),
+    FilledButton(onPressed: selectedGarment < 0 ? null : () => go(7), child: const Text('Next: Choose Photo'))
   ]);
+  IconData _garmentIcon(int i) => switch (i) {
+    0 => Icons.checkroom, 1 => Icons.woman, 2 => Icons.dry_cleaning, 3 => Icons.style,
+    4 => Icons.woman_2, 5 => Icons.auto_awesome, 6 => Icons.sports, 7 => Icons.layers, _ => Icons.checkroom
+  };
   Widget _clothingScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Select Clothing', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: ink)),
     const SizedBox(height: 12), Wrap(spacing: 8, children: ['Tops','Dresses','Jeans'].map((s) => ChoiceChip(label: Text(s), selected: false, onSelected: (_) {})).toList()),
