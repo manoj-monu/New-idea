@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
           Text('TryOut', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: ink, height: 1.0)),
           SizedBox(height: 3), Text('AI VIRTUAL TRY-ON', style: TextStyle(fontSize: 9, letterSpacing: 2.1, fontWeight: FontWeight.w800, color: muted))
         ])),
-        Container(decoration: BoxDecoration(color: const Color(0xFF21152D), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFFC857))), child: TextButton.icon(onPressed: () => onOpen(16), icon: const Icon(Icons.workspace_premium, color: Color(0xFFFFC857), size: 17), label: const Text('PRO', style: TextStyle(color: Color(0xFFFFD875), fontWeight: FontWeight.w900)))
+        Container(decoration: BoxDecoration(color: const Color(0xFF21152D), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFFC857))), child: TextButton.icon(onPressed: () => onOpen(16), icon: const Icon(Icons.workspace_premium, color: Color(0xFFFFC857), size: 17), label: const Text('PRO', style: TextStyle(color: Color(0xFFFFD875), fontWeight: FontWeight.w900))))
       ]),
       const SizedBox(height: 20),
       Container(padding: const EdgeInsets.all(20), decoration: BoxDecoration(
@@ -91,7 +91,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 10),
           const Text('Try Any Outfit\nwith AI', style: TextStyle(color: Colors.white, fontSize: 30, height: 1.03, fontWeight: FontWeight.w900)),
           const SizedBox(height: 10),
-          const Text('Choose a photo, pick a style, and explore your look.', style: TextStyle(color: Colors.white.withValues(alpha: .86), height: 1.4)),
+          Text('Choose a photo, pick a style, and explore your look.', style: TextStyle(color: Colors.white.withValues(alpha: .86), height: 1.4)),
           const SizedBox(height: 18),
           Row(children: [
             Expanded(child: FilledButton.icon(onPressed: () => onOpen(5), icon: const Icon(Icons.auto_awesome, size: 18), label: const Text('Try Now'), style: FilledButton.styleFrom(backgroundColor: const Color(0xFFFF3DE4), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14)))),
