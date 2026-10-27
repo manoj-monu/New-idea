@@ -69,24 +69,6 @@ class HomeScreen extends StatelessWidget {
   final void Function(int) onOpen;
   const HomeScreen({super.key, required this.onOpen});
 
-  static const _women = [
-    ('Dresses','https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop'),
-    ('Tops','https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&auto=format&fit=crop'),
-    ('Denim','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop'),
-    ('Traditional','https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop'),
-  ];
-  static const _men = [
-    ('Shirts','https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?w=600&auto=format&fit=crop'),
-    ('T-shirts','https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&auto=format&fit=crop'),
-    ('Jeans','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop'),
-    ('Jackets','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop'),
-  ];
-  static const _kids = [
-    ('Kids Tops','https://images.unsplash.com/photo-1519238263530-99F4E8B8D8B5?w=600&auto=format&fit=crop'),
-    ('Kids Dresses','https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop'),
-    ('Kids Denim','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop'),
-    ('Kids Styles','https://images.unsplash.com/photo-1519238263530-99F4E8B8D8B5?w=600&auto=format&fit=crop'),
-  ];
 
   @override
   Widget build(BuildContext context) => Container(
