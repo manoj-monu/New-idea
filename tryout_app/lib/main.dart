@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
           Text('TryOut', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: ink, height: 1.0)),
           SizedBox(height: 3), Text('AI VIRTUAL TRY-ON', style: TextStyle(fontSize: 9, letterSpacing: 2.1, fontWeight: FontWeight.w800, color: muted))
         ])),
-        Container(decoration: BoxDecoration(color: const Color(0xFF21152D), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFFC857))), child: TextButton.icon(onPressed: () => onOpen(16), icon: const Icon(Icons.workspace_premium, color: Color(0xFFFFC857), size: 17), label: const Text('PRO', style: TextStyle(color: Color(0xFFFFD875), fontWeight: FontWeight.w900)))),
+        Container(decoration: BoxDecoration(color: const Color(0xFF21152D), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFFC857))), child: TextButton.icon(onPressed: () => onOpen(21), icon: const Icon(Icons.workspace_premium, color: Color(0xFFFFC857), size: 17), label: const Text('PRO', style: TextStyle(color: Color(0xFFFFD875), fontWeight: FontWeight.w900)))),
       ]),
       const SizedBox(height: 20),
       Container(padding: const EdgeInsets.all(20), decoration: BoxDecoration(
@@ -186,6 +186,7 @@ class _AppScreenState extends State<AppScreen> {
       case 17: return _settingsScreen();
       case 18: return _helpScreen();
       case 19: return _menuScreen();
+      case 21: return _proScreen();
       default: return _threeDScreen();
     }
   }
@@ -300,6 +301,25 @@ class _AppScreenState extends State<AppScreen> {
     const SizedBox(height: 18), if (widget.savedLooks.isEmpty) const Padding(padding: EdgeInsets.all(24), child: Column(children: [Icon(Icons.photo_library_outlined, size: 56, color: purple), SizedBox(height: 12), Text('No saved looks yet', style: TextStyle(fontWeight: FontWeight.w800, color: ink)), SizedBox(height: 6), Text('Save photos here while the AI model is being built in Phase 2.', textAlign: TextAlign.center, style: TextStyle(color: muted))])) else GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: widget.savedLooks.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: .7, crossAxisSpacing: 10, mainAxisSpacing: 10), itemBuilder: (_, i) => ClipRRect(borderRadius: BorderRadius.circular(16), child: Image.file(File(widget.savedLooks[i].path), fit: BoxFit.cover))),
     const SizedBox(height: 12), FilledButton(onPressed: () => go(5), child: const Text('Create New Look'))
   ]);
+  Widget _proScreen() => ListView(padding: const EdgeInsets.fromLTRB(18, 12, 18, 28), children: [
+    Container(padding: const EdgeInsets.all(22), decoration: BoxDecoration(borderRadius: BorderRadius.circular(26), gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF31105E), Color(0xFF7B1FA2), Color(0xFF180D35)]), border: Border.all(color: const Color(0xFFFFD66B), width: 1.3)), child: Column(children: [
+      const Icon(Icons.workspace_premium_rounded, color: Color(0xFFFFD66B), size: 58),
+      const SizedBox(height: 8), const Text('TryOut PRO', style: TextStyle(fontSize: 31, fontWeight: FontWeight.w900, color: Colors.white)),
+      const SizedBox(height: 6), const Text('Unlock your full style potential', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+      const SizedBox(height: 20),
+      for (final benefit in ['Unlimited virtual try-ons','HD quality results • No watermark','Premium styles and collections','Priority processing','Save looks to your cloud','Ad-free experience']) Padding(padding: const EdgeInsets.symmetric(vertical: 7), child: Row(children: [const Icon(Icons.check_circle, color: Color(0xFFFF4DE1), size: 20), const SizedBox(width: 10), Expanded(child: Text(benefit, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))]))
+    ])),
+    const SizedBox(height: 18), const Text('Choose your plan', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900, color: ink)),
+    const SizedBox(height: 12),
+    Row(children: [
+      Expanded(child: _planCard('Monthly','₹499','per month',false)),
+      const SizedBox(width: 10), Expanded(child: _planCard('Yearly','₹2,999','₹249/month • save 50%',true))
+    ]),
+    const SizedBox(height: 12), Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: const Color(0xFF151321), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFF40204F))), child: const Text('Subscription UI preview. No payment is being charged and subscription purchase is not connected yet.', style: TextStyle(color: muted, fontSize: 12, height: 1.45))),
+    const SizedBox(height: 16), FilledButton.icon(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('PRO billing will be connected after the UI and testing phase.'))), icon: const Icon(Icons.lock_outline), label: const Text('Continue to PRO')),
+    const SizedBox(height: 8), Center(child: TextButton(onPressed: () => Navigator.pop(context), child: const Text('Not now', style: TextStyle(color: muted))))
+  ]);
+  Widget _planCard(String title, String price, String detail, bool featured) => Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: featured ? const Color(0xFF271333) : const Color(0xFF151321), borderRadius: BorderRadius.circular(18), border: Border.all(color: featured ? purple : const Color(0xFF40204F), width: featured ? 1.8 : 1)), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [if (featured) const Text('POPULAR', style: TextStyle(color: purple, fontSize: 10, fontWeight: FontWeight.w900)), Text(title, style: const TextStyle(color: ink, fontWeight: FontWeight.w800)), const SizedBox(height: 8), Text(price, style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w900)), Text(detail, style: const TextStyle(color: muted, fontSize: 10))]));
   Widget _profileScreen() => ListView(padding: const EdgeInsets.all(18), children: [
     const Text('Profile', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: ink)), const SizedBox(height: 18),
     Container(padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)), child: const Row(children: [CircleAvatar(radius: 28, backgroundColor: purpleLight, child: Icon(Icons.person, color: purple, size: 30)), SizedBox(width: 14), Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Guest User', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: ink)), Text('Local profile', style: TextStyle(color: muted))])])),
