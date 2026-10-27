@@ -11,7 +11,7 @@ const muted = Color(0xFFB8B1C8);
 const pageBg = Color(0xFF070812);
 const categories = ['Women', 'Men', 'Kids'];
 const clothes = ['Tops', 'Dresses', 'Jeans', 'Jackets', 'Sarees', 'Traditional', 'Sportswear', 'Innerwear', 'Shirts'];
-const screenTitles = ['Splash Screen','Onboarding 1','Onboarding 2','Onboarding 3','Home Screen','Choose Category','Select Clothing','Choose Your Photo','Crop Photo','Choose Clothing Photo','Processing','Try-On Result','Edit Look','Save & Share','My Wardrobe','My Looks / History','Profile','Settings','Help & Support','Side Menu','3D View'];
+const screenTitles = ['Splash Screen','Onboarding 1','Onboarding 2','Onboarding 3','Home Screen','Choose Category','Select Clothing','Choose Your Photo','Crop Photo','Choose Clothing Photo','Processing','Try-On Result','Edit Look','Save & Share','My Wardrobe','My Looks / History','Profile','Settings','Help & Support','Side Menu','3D View','TryOut PRO'];
 
 class TryOutApp extends StatelessWidget {
   const TryOutApp({super.key});
