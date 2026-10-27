@@ -106,19 +106,77 @@ class HomeScreen extends StatelessWidget {
         Container(decoration: BoxDecoration(color: const Color(0xFF21152D), borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFFFFC857))), child: TextButton.icon(onPressed: () => onOpen(21), icon: const Icon(Icons.workspace_premium, color: Color(0xFFFFC857), size: 16), label: const Text('PRO', style: TextStyle(color: Color(0xFFFFD875), fontWeight: FontWeight.w900))))
       ]),
       const SizedBox(height: 18),
-      Container(height: 255, decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), border: Border.all(color: const Color(0xFFB63CFF), width: 1.2), boxShadow: [BoxShadow(color: purple.withValues(alpha: .22), blurRadius: 22)]), child: ClipRRect(borderRadius: BorderRadius.circular(24), child: Stack(fit: StackFit.expand, children: [
-        Image.network('https://images.unsplash.com/photo-1539107595713-5c7e4c8d4f0d?w=1000&auto=format&fit=crop', fit: BoxFit.cover, alignment: Alignment.topCenter, errorBuilder: (_,__,___) => Container(color: const Color(0xFF27103D))),
-        Container(decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xF5080714), Color(0xD9080714), Color(0x15080714)]))),
-        Padding(padding: const EdgeInsets.all(18), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6), decoration: BoxDecoration(color: const Color(0xFF38174B), borderRadius: BorderRadius.circular(30), border: Border.all(color: const Color(0xFFB63CFF))), child: const Text('✦  AI FASHION STUDIO', style: TextStyle(color: Color(0xFFFFA8F4), fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1)),
-          const Spacer(),
-          const Text('Your style.\nYour rules.', style: TextStyle(color: Colors.white, fontSize: 30, height: 1.04, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 8),
-          const Text('Try on any outfit virtually', style: TextStyle(color: Colors.white70, fontSize: 12)),
-          const SizedBox(height: 14),
-          SizedBox(width: 130, child: FilledButton.icon(onPressed: () => onOpen(5), icon: const Icon(Icons.auto_awesome, size: 16), label: const Text('Try Now'), style: FilledButton.styleFrom(backgroundColor: const Color(0xFFFF35D7), padding: const EdgeInsets.symmetric(vertical: 12))))
-        ]))
-      ]))),
+      Container(
+        height: 255,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(color: const Color(0xFFB63CFF), width: 1.2),
+          boxShadow: [BoxShadow(color: purple.withValues(alpha: .22), blurRadius: 22)],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.network(
+                'https://images.unsplash.com/photo-1539107595713-5c7e4c8d4f0d?w=1000&auto=format&fit=crop',
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+                errorBuilder: (_, __, ___) => Container(color: const Color(0xFF27103D)),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xF5080714), Color(0xD9080714), Color(0x15080714)],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF38174B),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: const Color(0xFFB63CFF)),
+                      ),
+                      child: const Text(
+                        '✦  AI FASHION STUDIO',
+                        style: TextStyle(color: Color(0xFFFFA8F4), fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1),
+                      ),
+                    ),
+                    const Spacer(),
+                    const Text(
+                      'Your style.\\nYour rules.',
+                      style: TextStyle(color: Colors.white, fontSize: 30, height: 1.04, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text('Try on any outfit virtually', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: 130,
+                      child: FilledButton.icon(
+                        onPressed: () => onOpen(5),
+                        icon: const Icon(Icons.auto_awesome, size: 16),
+                        label: const Text('Try Now'),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF35D7),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       const SizedBox(height: 23),
       _sectionTitle('Quick Actions', 'See all  →', () => onOpen(5)),
       const SizedBox(height: 10),
