@@ -132,7 +132,7 @@ class HomeScreen extends StatelessWidget {
       const SizedBox(height: 10),
       Row(children: [
         Expanded(child: _genderCard('Women', 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&auto=format&fit=crop', () => onOpen(5))),
-        const SizedBox(width: 10), Expanded(child: _genderCard('Men', 'https://images.unsplash.com/photo-150街?w=500&auto=format&fit=crop', () => onOpen(5))),
+        const SizedBox(width: 10), Expanded(child: _genderCard('Men', 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop', () => onOpen(5))),
         const SizedBox(width: 10), Expanded(child: _genderCard('Kids', 'https://images.unsplash.com/photo-1519238263530-99F4E8B8D8B5?w=500&auto=format&fit=crop', () => onOpen(5))),
       ]),
       const SizedBox(height: 23),
